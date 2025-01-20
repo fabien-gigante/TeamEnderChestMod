@@ -1,6 +1,6 @@
 ![Icon](./src/main/resources/assets/icon.png)
-# Team Ender Chest Mod
-Welcome to the *Team Ender Chest Mod* Minecraft mod.
+# Team Ender Chest
+Welcome to the *Team Ender Chest* Minecraft mod.
 
 If your player is part of a team, you can open an ender chest *while crouching* to access the shared container of your team.
 
