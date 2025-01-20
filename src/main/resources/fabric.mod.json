@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "team-ender-chest",
+	"version": "${version}",
+	"name": "Team Ender Chest",
+	"description": "If your player is part of a team, you can open an ender chest while crouching to access the shared container of your team.",
+	"authors": ["Fabien Gigante"],
+	"contact": {
+		"homepage": "https://github.com/fabien-gigante/TeamEnderChestMod",
+		"sources": "https://github.com/fabien-gigante/TeamEnderChestMod",
+		"issues": "https://github.com/fabien-gigante/TeamEnderChestMod/issues"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.fabien_gigante.TeamEnderChestMod"
+		]
+	},
+	"mixins": [
+		"TeamEnderChestMod.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.21.4",
+		"java": ">=21"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
