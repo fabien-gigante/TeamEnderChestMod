@@ -3,7 +3,7 @@
 	"id": "team-ender-chest",
 	"version": "${version}",
 	"name": "Team Ender Chest",
-	"description": "If your player is part of a team, you can open an ender chest while crouching to access the shared container of your team.",
+	"description": "If your player is part of a team, you can open an ender chest to access the shared container of your team, by using a trail key, ender eye or spyglass.",
 	"authors": ["Fabien Gigante"],
 	"contact": {
 		"homepage": "https://github.com/fabien-gigante/TeamEnderChestMod",
@@ -22,7 +22,7 @@
 		"TeamEnderChestMod.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.16.10",
+		"fabricloader": ">=0.16.9",
 		"minecraft": "~1.21.4",
 		"java": ">=21"
 	},
