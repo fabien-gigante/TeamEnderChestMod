@@ -3,7 +3,7 @@
 	"id": "team-ender-chest",
 	"version": "${version}",
 	"name": "Team Ender Chest",
-	"description": "If your player is part of a team, you can open an ender chest to access the shared container of your team, by using a trail key, ender eye or spyglass.",
+	"description": "If your player is part of a team and you open an ender chest, you have access to a shared container for your team in addition to your own.",
 	"authors": ["Fabien Gigante"],
 	"contact": {
 		"homepage": "https://github.com/fabien-gigante/TeamEnderChestMod",
@@ -16,10 +16,17 @@
 	"entrypoints": {
 		"main": [
 			"com.fabien_gigante.TeamEnderChestMod"
+		],
+		"client": [
+			"com.fabien_gigante.TeamEnderChestModClient"
 		]
 	},
 	"mixins": [
-		"TeamEnderChestMod.mixins.json"
+		"TeamEnderChestMod.mixins.json",
+		{
+			"config": "TeamEnderChestMod.client.mixins.json",
+			"environment": "client"
+		}
 	],
 	"depends": {
 		"fabricloader": ">=0.16.9",

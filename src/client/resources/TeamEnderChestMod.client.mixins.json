@@ -2,9 +2,7 @@
 	"required": true,
 	"package": "com.fabien_gigante.mixin",
 	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-		"TeamMixin","ScoreboardStateMixin","EnderChestBlockMixin"
-	],
+	"client": [ "GenericContainerScreenMixin" ],
 	"injectors": {
 		"defaultRequire": 1
 	}
