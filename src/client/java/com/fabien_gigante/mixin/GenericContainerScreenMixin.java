@@ -34,10 +34,8 @@ public abstract class GenericContainerScreenMixin extends HandledScreen<GenericC
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY, CallbackInfo ci) {
         if (!this.isTeamEnderChest) return;
         int color = 0x30000000 | player.getTeamColorValue();
-        for(int i = 27; i < 54; i++) {
-            Slot slot = this.handler.getSlot(i);
-            context.fill(RenderLayer.getGui(), this.x + slot.x, this.y + slot.y, this.x + slot.x + 16,this.y + slot.y + 16, color);
-        }
+        Slot first = this.handler.getSlot(27), last = this.handler.getSlot(53);
+        context.fill(RenderLayer.getGui(), this.x + first.x - 1, this.y + first.y - 1, this.x + last.x + 17,this.y + last.y + 17, color);
     }
 
 }
