@@ -1,6 +1,8 @@
 package com.fabien_gigante.mixin;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -12,13 +14,14 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import com.fabien_gigante.TeamEnderChestUtil;
 
 @Mixin(GenericContainerScreen.class)
 public abstract class GenericContainerScreenMixin extends HandledScreen<GenericContainerScreenHandler> {
+    @Shadow @Final private static  Identifier TEXTURE;
     private boolean isTeamEnderChest = false;
     protected PlayerEntity player;
 
@@ -33,9 +36,9 @@ public abstract class GenericContainerScreenMixin extends HandledScreen<GenericC
     @Inject(method = "drawBackground", at = @At("TAIL"))
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY, CallbackInfo ci) {
         if (!this.isTeamEnderChest) return;
-        int color = 0x30000000 | player.getTeamColorValue();
-        Slot first = this.handler.getSlot(27), last = this.handler.getSlot(53);
-        context.fill(RenderLayer.getGui(), this.x + first.x - 1, this.y + first.y - 1, this.x + last.x + 17,this.y + last.y + 17, color);
+        int color = 0x80000000 | player.getTeamColorValue();
+        int x = 8-2, y = 72-2, w = 9*18+2, h = 3*18+2;
+        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, this.x + x, this.y + y, x, y, w, h, 256, 256, color);
     }
 
 }
