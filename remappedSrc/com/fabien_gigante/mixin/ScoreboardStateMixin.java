@@ -32,7 +32,7 @@ public abstract class ScoreboardStateMixin implements ITeamState {
     }
 
     @Shadow
-    protected abstract NbtList teamsToNbt(RegistryWrapper.WrapperLookup registries);
+    private NbtList teamsToNbt(RegistryWrapper.WrapperLookup registries) { throw new RuntimeException(); }
 
     @Inject(method="teamsToNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;put(Ljava/lang/String;Lnet/minecraft/nbt/NbtElement;)Lnet/minecraft/nbt/NbtElement;"))
     private void teamEnderChestToNbt(RegistryWrapper.WrapperLookup registries, CallbackInfoReturnable<NbtList> ci, @Local NbtCompound nbtCompound, @Local Team team) {

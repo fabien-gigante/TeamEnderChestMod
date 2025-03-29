@@ -3,7 +3,7 @@
 	"package": "com.fabien_gigante.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"TeamMixin","ScoreboardStateMixin","EnderChestBlockMixin"
+		"TeamMixin","TeamPackedMixin","ScoreboardMixin","EnderChestBlockMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
