@@ -9,4 +9,7 @@ public class TeamEnderChestUtil {
         if (player.getScoreboardTeam() == null) return null;
         return Text.empty().append(CONTAINER_NAME).append(" ").append(player.getScoreboardTeam().getFormattedName());
     }
+    public static boolean isTeamEnderChestTitle(Text title) {
+        return title.contains(Text.empty().append(CONTAINER_NAME).append(" "));
+    }
 }

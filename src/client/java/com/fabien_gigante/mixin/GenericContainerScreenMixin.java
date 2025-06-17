@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -38,7 +39,7 @@ public abstract class GenericContainerScreenMixin extends HandledScreen<GenericC
         if (!this.isTeamEnderChest) return;
         int color = 0x80000000 | player.getTeamColorValue();
         int x = 8-2, y = 72-2, w = 9*18+2, h = 3*18+2;
-        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, this.x + x, this.y + y, x, y, w, h, 256, 256, color);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, this.x + x, this.y + y, x, y, w, h, 256, 256, color);
     }
 
 }
