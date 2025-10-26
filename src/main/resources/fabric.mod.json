@@ -22,11 +22,7 @@
 		]
 	},
 	"mixins": [
-		"TeamEnderChestMod.mixins.json",
-		{
-			"config": "TeamEnderChestMod.client.mixins.json",
-			"environment": "client"
-		}
+		"TeamEnderChestMod.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.16.14",

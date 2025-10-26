@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import com.fabien_gigante.IEnderChestHolder;
-import com.fabien_gigante.TeamEnderChestUtil;
+import com.fabien_gigante.TeamEnderChestMod;
 
 @Mixin(EnderChestBlock.class)
 public abstract class EnderChestBlockMixin {
@@ -28,13 +28,14 @@ public abstract class EnderChestBlockMixin {
 
     @Redirect(method = "onUse", at = @At(value = "FIELD", target = "Lnet/minecraft/block/EnderChestBlock;CONTAINER_NAME:Lnet/minecraft/text/Text;"))
     private Text getContainerName(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        return player.getScoreboardTeam() instanceof IEnderChestHolder ? TeamEnderChestUtil.getTeamEnderChestTitle(player) : CONTAINER_NAME;
+        if (!(player.getScoreboardTeam() instanceof IEnderChestHolder)) return CONTAINER_NAME;
+        return Text.empty().append(CONTAINER_NAME).append(" ").append(player.getScoreboardTeam().getFormattedName());
     }
 
     @Redirect(method = "method_55773", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/GenericContainerScreenHandler;createGeneric9x3(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/inventory/Inventory;)Lnet/minecraft/screen/GenericContainerScreenHandler;"))
     private static GenericContainerScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
         if (playerInventory.player.getScoreboardTeam() instanceof IEnderChestHolder team)
-            return GenericContainerScreenHandler.createGeneric9x6(syncId, playerInventory, new DoubleInventory(inventory, team.getEnderChestInventory()));
+            return new GenericContainerScreenHandler(TeamEnderChestMod.SCREEN_HANDLER_TYPE, syncId, playerInventory, new DoubleInventory(inventory, team.getEnderChestInventory()), 6);
         else return  GenericContainerScreenHandler.createGeneric9x3(syncId, playerInventory, inventory);
     }
 }

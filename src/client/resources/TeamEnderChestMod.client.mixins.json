@@ -1,9 +1,0 @@
-{
-	"required": true,
-	"package": "com.fabien_gigante.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"client": [ "GenericContainerScreenMixin" ],
-	"injectors": {
-		"defaultRequire": 1
-	}
-}

@@ -47,6 +47,7 @@ public class TeamPackedMixin implements IEnderChestHolder {
     private static void setCodec(CallbackInfo ci) {
 		CODEC = RecordCodecBuilder.create(instance -> {
 			return instance.group(
+				// Vanilla fields
 				Codec.STRING.fieldOf("Name").forGetter(Team.Packed::name),
 				TextCodecs.CODEC.optionalFieldOf("DisplayName").forGetter(Team.Packed::displayName),
 				Formatting.COLOR_CODEC.optionalFieldOf("TeamColor").forGetter(Team.Packed::color),

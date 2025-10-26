@@ -3,6 +3,7 @@ package com.fabien_gigante;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.fabricmc.api.ClientModInitializer;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 
 public class TeamEnderChestModClient implements ClientModInitializer {
 	public static final String MOD_ID = "team-ender-chest";
@@ -12,5 +13,6 @@ public class TeamEnderChestModClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		LOGGER.info("Team Ender Chest - Mod starting (client)...");
+		HandledScreens.register(TeamEnderChestMod.SCREEN_HANDLER_TYPE, TeamEnderChestScreen::new);
 	}
 }
