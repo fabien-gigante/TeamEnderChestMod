@@ -2,7 +2,15 @@ package com.fabien_gigante.mixin;
 
 import java.util.List;
 import java.util.Optional;
-
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.world.inventory.PlayerEnderChestContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Team.CollisionRule;
+import net.minecraft.world.scores.Team.Visibility;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -16,49 +24,39 @@ import com.fabien_gigante.IEnderChestHolder;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.inventory.EnderChestInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.TextCodecs;
-import net.minecraft.text.Text;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.util.Formatting;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.scoreboard.AbstractTeam.CollisionRule;
-import net.minecraft.scoreboard.AbstractTeam.VisibilityRule;
-
-@Mixin(Team.Packed.class)
+@Mixin(PlayerTeam.Packed.class)
 public class TeamPackedMixin implements IEnderChestHolder {
-    @Unique private EnderChestInventory enderChestInventory = new EnderChestInventory();
+    @Unique private PlayerEnderChestContainer enderChestContainer = new PlayerEnderChestContainer();
 
 	@Override
-	public EnderChestInventory getEnderChestInventory() { return this.enderChestInventory; }
+	public PlayerEnderChestContainer getEnderChestContainer() { return this.enderChestContainer; }
 	@Override
-    public void setEnderChestInventory(EnderChestInventory enderChestInventory) { this.enderChestInventory = enderChestInventory;} 
+    public void setEnderChestContainer(PlayerEnderChestContainer enderChestContainer) { this.enderChestContainer = enderChestContainer;} 
 
-	private static Team.Packed create(String name, Optional<Text> displayName, Optional<Formatting> color, boolean allowFriendlyFire, boolean seeFriendlyInvisibles, Text memberNamePrefix, Text memberNameSuffix, VisibilityRule nameTagVisibility, VisibilityRule deathMessageVisibility, CollisionRule collisionRule, List<String> players, List<ItemStack> enderItems) {
-        Team.Packed packed = new Team.Packed(name, displayName, color, allowFriendlyFire, seeFriendlyInvisibles, memberNamePrefix, memberNameSuffix, nameTagVisibility, deathMessageVisibility, collisionRule, players);
+	private static PlayerTeam.Packed create(String name, Optional<Component> displayName, Optional<ChatFormatting> color, boolean allowFriendlyFire, boolean seeFriendlyInvisibles, Component memberNamePrefix, Component memberNameSuffix, Visibility nameTagVisibility, Visibility deathMessageVisibility, CollisionRule collisionRule, List<String> players, List<ItemStack> enderItems) {
+        PlayerTeam.Packed packed = new PlayerTeam.Packed(name, displayName, color, allowFriendlyFire, seeFriendlyInvisibles, memberNamePrefix, memberNameSuffix, nameTagVisibility, deathMessageVisibility, collisionRule, players);
 		if (enderItems != null) ((TeamPackedMixin) (Object) packed).setEnderItems(enderItems);
         return packed;
 	}
 
-	@Shadow @Final @Mutable public static Codec<Team.Packed> CODEC;
+	@Shadow @Final @Mutable public static Codec<PlayerTeam.Packed> CODEC;
 
  	@Inject(method="<clinit>",at=@At("TAIL"))
     private static void setCodec(CallbackInfo ci) {
 		CODEC = RecordCodecBuilder.create(instance -> {
 			return instance.group(
 				// Vanilla fields
-				Codec.STRING.fieldOf("Name").forGetter(Team.Packed::name),
-				TextCodecs.CODEC.optionalFieldOf("DisplayName").forGetter(Team.Packed::displayName),
-				Formatting.COLOR_CODEC.optionalFieldOf("TeamColor").forGetter(Team.Packed::color),
-				Codec.BOOL.optionalFieldOf("AllowFriendlyFire", true).forGetter(Team.Packed::allowFriendlyFire),
-				Codec.BOOL.optionalFieldOf("SeeFriendlyInvisibles", true).forGetter(Team.Packed::seeFriendlyInvisibles),
-				TextCodecs.CODEC.optionalFieldOf("MemberNamePrefix", ScreenTexts.EMPTY).forGetter(Team.Packed::memberNamePrefix),
-				TextCodecs.CODEC.optionalFieldOf("MemberNameSuffix", ScreenTexts.EMPTY).forGetter(Team.Packed::memberNameSuffix),
-				VisibilityRule.CODEC.optionalFieldOf("NameTagVisibility", VisibilityRule.ALWAYS).forGetter(Team.Packed::nameTagVisibility), 
-				VisibilityRule.CODEC.optionalFieldOf("DeathMessageVisibility", VisibilityRule.ALWAYS).forGetter(Team.Packed::deathMessageVisibility),
-				CollisionRule.CODEC.optionalFieldOf("CollisionRule", CollisionRule.ALWAYS).forGetter(Team.Packed::collisionRule), 
-				Codec.STRING.listOf().optionalFieldOf("Players", List.of()).forGetter(Team.Packed::players),
+				Codec.STRING.fieldOf("Name").forGetter(PlayerTeam.Packed::name),
+				ComponentSerialization.CODEC.optionalFieldOf("DisplayName").forGetter(PlayerTeam.Packed::displayName),
+				ChatFormatting.COLOR_CODEC.optionalFieldOf("TeamColor").forGetter(PlayerTeam.Packed::color),
+				Codec.BOOL.optionalFieldOf("AllowFriendlyFire", true).forGetter(PlayerTeam.Packed::allowFriendlyFire),
+				Codec.BOOL.optionalFieldOf("SeeFriendlyInvisibles", true).forGetter(PlayerTeam.Packed::seeFriendlyInvisibles),
+				ComponentSerialization.CODEC.optionalFieldOf("MemberNamePrefix", CommonComponents.EMPTY).forGetter(PlayerTeam.Packed::memberNamePrefix),
+				ComponentSerialization.CODEC.optionalFieldOf("MemberNameSuffix", CommonComponents.EMPTY).forGetter(PlayerTeam.Packed::memberNameSuffix),
+				Visibility.CODEC.optionalFieldOf("NameTagVisibility", Visibility.ALWAYS).forGetter(PlayerTeam.Packed::nameTagVisibility), 
+				Visibility.CODEC.optionalFieldOf("DeathMessageVisibility", Visibility.ALWAYS).forGetter(PlayerTeam.Packed::deathMessageVisibility),
+				CollisionRule.CODEC.optionalFieldOf("CollisionRule", CollisionRule.ALWAYS).forGetter(PlayerTeam.Packed::collisionRule), 
+				Codec.STRING.listOf().optionalFieldOf("Players", List.of()).forGetter(PlayerTeam.Packed::players),
 				// Add the field for enderChestInventory
 				ItemStack.OPTIONAL_CODEC.listOf().optionalFieldOf("EnderItems", null).forGetter(packed -> ((TeamPackedMixin) (Object) packed).getEnderItems())
 			).apply(instance, TeamPackedMixin::create);

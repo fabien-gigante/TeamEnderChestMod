@@ -6,17 +6,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.Team;
-
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Scoreboard;
 import com.fabien_gigante.IEnderChestHolder;
 
 @Mixin(Scoreboard.class)
 public abstract class ScoreboardMixin {
-   // Inject at the end of the addTeam method
-    @Inject(method = "addTeam(Lnet/minecraft/scoreboard/Team$Packed;)V", at = @At("TAIL"))
-    private void onAddTeam(Team.Packed packedTeam, CallbackInfo ci, @Local Team team) {
-        ((IEnderChestHolder)(Object)team).setEnderChestInventory(((IEnderChestHolder)(Object)packedTeam).getEnderChestInventory());
+   // Inject at the end of the loadPlayerTeam method
+    @Inject(method = "loadPlayerTeam(Lnet/minecraft/world/scores/PlayerTeam$Packed;)V", at = @At("TAIL"))
+    private void onLoadPlayerTeam(PlayerTeam.Packed packedTeam, CallbackInfo ci, @Local PlayerTeam team) {
+        ((IEnderChestHolder)(Object)team).setEnderChestContainer(((IEnderChestHolder)(Object)packedTeam).getEnderChestContainer());
     }
 
 }

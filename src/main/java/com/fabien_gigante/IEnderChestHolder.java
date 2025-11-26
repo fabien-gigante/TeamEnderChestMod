@@ -1,17 +1,16 @@
 package com.fabien_gigante;
 
 import java.util.List;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.inventory.EnderChestInventory;
+import net.minecraft.world.inventory.PlayerEnderChestContainer;
+import net.minecraft.world.item.ItemStack;
 
 public interface IEnderChestHolder {
-    EnderChestInventory getEnderChestInventory();
-    void setEnderChestInventory(EnderChestInventory enderChestInventory);
+    PlayerEnderChestContainer getEnderChestContainer();
+    void setEnderChestContainer(PlayerEnderChestContainer enderChestContainer);
 
-    default List<ItemStack> getEnderItems() { return getEnderChestInventory().getHeldStacks(); }
+    default List<ItemStack> getEnderItems() { return getEnderChestContainer().getItems(); }
     default void setEnderItems(List<ItemStack> enderItems) {
-        EnderChestInventory enderChest = getEnderChestInventory();
-        for(int i = 0; i < enderChest.size(); i++) enderChest.heldStacks.set(i, enderItems.get(i));
+        PlayerEnderChestContainer enderChestContainer = getEnderChestContainer();
+        for(int i = 0; i < enderChestContainer.getContainerSize(); i++) enderChestContainer.items.set(i, enderItems.get(i));
     }
 }

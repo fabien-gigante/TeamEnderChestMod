@@ -7,31 +7,29 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.inventory.EnderChestInventory;
-import net.minecraft.inventory.Inventory;
-
 import com.fabien_gigante.IEnderChestHolder;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.PlayerEnderChestContainer;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Scoreboard;
 
-@Mixin(Team.class)
+@Mixin(PlayerTeam.class)
 public class TeamMixin implements IEnderChestHolder {
 	@Shadow @Final private Scoreboard scoreboard;
-	EnderChestInventory enderChestInventory = new EnderChestInventory();
+	PlayerEnderChestContainer enderChestContainer = new PlayerEnderChestContainer();
 
 	@Inject(method="<init>", at=@At(value="TAIL"))
 	private void init(Scoreboard scoreboard, String name, CallbackInfo ci) {
-		enderChestInventory.addListener((Inventory sender) -> { scoreboard.updateScoreboardTeam((Team)(Object)this); });
+		enderChestContainer.addListener((Container sender) -> { scoreboard.onTeamChanged((PlayerTeam)(Object)this); });
 	}
 
 	@Override
-	public EnderChestInventory getEnderChestInventory() { return this.enderChestInventory; }
+	public PlayerEnderChestContainer getEnderChestContainer() { return this.enderChestContainer; }
 	@Override
-	public void setEnderChestInventory(EnderChestInventory enderChestInventory) { this.enderChestInventory = enderChestInventory; }
+	public void setEnderChestContainer(PlayerEnderChestContainer enderChestContainer) { this.enderChestContainer = enderChestContainer; }
 
     @Inject(method = "pack", at = @At("RETURN"), cancellable = true)
-    private void onPack(CallbackInfoReturnable<Team.Packed> cir) {
-        ((IEnderChestHolder)(Object)(cir.getReturnValue())).setEnderChestInventory(enderChestInventory);
+    private void onPack(CallbackInfoReturnable<PlayerTeam.Packed> cir) {
+        ((IEnderChestHolder)(Object)(cir.getReturnValue())).setEnderChestContainer(enderChestContainer);
 	}
 }

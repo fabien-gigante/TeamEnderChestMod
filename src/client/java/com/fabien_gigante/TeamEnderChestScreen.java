@@ -1,28 +1,28 @@
 package com.fabien_gigante;
 
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.ContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ChestMenu;
 
-public class TeamEnderChestScreen extends GenericContainerScreen {
-	private static final Identifier TEXTURE = Identifier.ofVanilla("textures/gui/container/generic_54.png");
-    protected PlayerEntity player;
+public class TeamEnderChestScreen extends ContainerScreen {
+	private static final ResourceLocation TEXTURE = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
+    protected Player player;
 
-    public TeamEnderChestScreen(GenericContainerScreenHandler handler, PlayerInventory inventory, Text title) {
+    public TeamEnderChestScreen(ChestMenu handler, Inventory inventory, Component title) {
         super(handler, inventory, title); 
         this.player = inventory.player;
     }
 
 	@Override
-	protected void drawBackground(DrawContext context, float deltaTicks, int mouseX, int mouseY) {
-        super.drawBackground(context, deltaTicks, mouseX, mouseY);
-        int color = 0x80000000 | player.getTeamColorValue();
+	protected void renderBg(GuiGraphics graphics, float deltaTicks, int mouseX, int mouseY) {
+        super.renderBg(graphics, deltaTicks, mouseX, mouseY);
+        int color = 0x80000000 | player.getTeamColor();
         int x = 8-2, y = 72-2, w = 9*18+2, h = 3*18+2;
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, this.x + x, this.y + y, x, y, w, h, 256, 256, color);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, this.leftPos + x, this.topPos + y, x, y, w, h, 256, 256, color);
     }
 }
