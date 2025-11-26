@@ -13,7 +13,7 @@ import com.fabien_gigante.IEnderChestHolder;
 @Mixin(Scoreboard.class)
 public abstract class ScoreboardMixin {
    // Inject at the end of the loadPlayerTeam method
-    @Inject(method = "loadPlayerTeam(Lnet/minecraft/world/scores/PlayerTeam$Packed;)V", at = @At("TAIL"))
+    @Inject(method = "loadPlayerTeam", at = @At("TAIL"))
     private void onLoadPlayerTeam(PlayerTeam.Packed packedTeam, CallbackInfo ci, @Local PlayerTeam team) {
         ((IEnderChestHolder)(Object)team).setEnderChestContainer(((IEnderChestHolder)(Object)packedTeam).getEnderChestContainer());
     }
