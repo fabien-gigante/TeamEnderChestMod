@@ -8,18 +8,15 @@ import net.minecraft.commands.arguments.TeamArgument;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.ServerScoreboard;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.scores.PlayerTeam;
-import net.minecraft.world.scores.ScoreboardSaveData;
-import net.minecraft.world.scores.Team;
-import net.minecraft.world.scores.Scoreboard.PackedScore;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +47,7 @@ public class TeamEnderChestMod implements ModInitializer {
 		CommandSourceStack source = context.getSource();
 		PlayerTeam team = TeamArgument.getTeam(context, "team");
 		PlayerTeam.Packed packed = team.pack();
-		Tag nbt = PlayerTeam.Packed.CODEC.encode(packed, net.minecraft.nbt.NbtOps.INSTANCE, new CompoundTag()).result().orElseThrow(null);
+		Tag nbt = PlayerTeam.Packed.CODEC.encode(packed, NbtOps.INSTANCE, new CompoundTag()).result().orElseThrow(null);
 		source.sendSuccess( () -> Component.translatable( "commands.data.team.query", team.getFormattedDisplayName(), NbtUtils.toPrettyComponent(nbt)), false);
 		return 1;
 	}
