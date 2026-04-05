@@ -12,7 +12,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -33,7 +33,7 @@ public class TeamEnderChestMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Team Ender Chest - Mod starting...");
-		Registry.register(BuiltInRegistries.MENU, ResourceLocation.fromNamespaceAndPath(MOD_ID, "ender_chest"), MENU_TYPE);
+		Registry.register(BuiltInRegistries.MENU, Identifier.fromNamespaceAndPath(MOD_ID, "ender_chest"), MENU_TYPE);
 		
 		// TODO : better integration with DataCommand (using DataCommandObject, DataCommand$ObjectType for Team)
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {

@@ -8,25 +8,25 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.fabien_gigante.IEnderChestHolder;
-import net.minecraft.world.Container;
-import net.minecraft.world.inventory.PlayerEnderChestContainer;
+import com.fabien_gigante.TeamEnderChestContainer;
+
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 
 @Mixin(PlayerTeam.class)
 public class TeamMixin implements IEnderChestHolder {
 	@Shadow @Final private Scoreboard scoreboard;
-	PlayerEnderChestContainer enderChestContainer = new PlayerEnderChestContainer();
+	@Final TeamEnderChestContainer enderChestContainer;
 
 	@Inject(method="<init>", at=@At(value="TAIL"))
 	private void init(Scoreboard scoreboard, String name, CallbackInfo ci) {
-		enderChestContainer.addListener((Container sender) -> { scoreboard.onTeamChanged((PlayerTeam)(Object)this); });
+		enderChestContainer = new TeamEnderChestContainer((PlayerTeam)(Object)this);
 	}
 
 	@Override
-	public PlayerEnderChestContainer getEnderChestContainer() { return this.enderChestContainer; }
+	public TeamEnderChestContainer getEnderChestContainer() { return this.enderChestContainer; }
 	@Override
-	public void setEnderChestContainer(PlayerEnderChestContainer enderChestContainer) { this.enderChestContainer = enderChestContainer; }
+	public void setEnderChestContainer(TeamEnderChestContainer enderChestContainer) { this.enderChestContainer = enderChestContainer; }
 
     @Inject(method = "pack", at = @At("RETURN"), cancellable = true)
     private void onPack(CallbackInfoReturnable<PlayerTeam.Packed> cir) {

@@ -29,7 +29,7 @@ public abstract class EnderChestBlockMixin {
         return Component.translatable("%s %s", CONTAINER_TITLE, player.getTeam().getFormattedDisplayName());
     }
 
-    @Redirect(method = "method_55773", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/ChestMenu;threeRows(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/Container;)Lnet/minecraft/world/inventory/ChestMenu;"))
+    @Redirect(method = "lambda$useWithoutItem$0", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/ChestMenu;threeRows(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/Container;)Lnet/minecraft/world/inventory/ChestMenu;"))
     private static ChestMenu createMenu(int syncId, Inventory inventory, Container container) {
         if (inventory.player.getTeam() instanceof IEnderChestHolder team)
             return new ChestMenu(TeamEnderChestMod.MENU_TYPE, syncId, inventory, new CompoundContainer(container, team.getEnderChestContainer()), 6);

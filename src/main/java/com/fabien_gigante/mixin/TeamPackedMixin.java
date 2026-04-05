@@ -21,17 +21,18 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.fabien_gigante.IEnderChestHolder;
+import com.fabien_gigante.TeamEnderChestContainer;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 @Mixin(PlayerTeam.Packed.class)
 public class TeamPackedMixin implements IEnderChestHolder {
-    @Unique private PlayerEnderChestContainer enderChestContainer = new PlayerEnderChestContainer();
+    @Unique private TeamEnderChestContainer enderChestContainer = new TeamEnderChestContainer();
 
 	@Override
-	public PlayerEnderChestContainer getEnderChestContainer() { return this.enderChestContainer; }
+	public TeamEnderChestContainer getEnderChestContainer() { return this.enderChestContainer; }
 	@Override
-    public void setEnderChestContainer(PlayerEnderChestContainer enderChestContainer) { this.enderChestContainer = enderChestContainer;} 
+    public void setEnderChestContainer(TeamEnderChestContainer enderChestContainer) { this.enderChestContainer = enderChestContainer;} 
 
 	private static PlayerTeam.Packed create(String name, Optional<Component> displayName, Optional<ChatFormatting> color, boolean allowFriendlyFire, boolean seeFriendlyInvisibles, Component memberNamePrefix, Component memberNameSuffix, Visibility nameTagVisibility, Visibility deathMessageVisibility, CollisionRule collisionRule, List<String> players, List<ItemStack> enderItems) {
         PlayerTeam.Packed packed = new PlayerTeam.Packed(name, displayName, color, allowFriendlyFire, seeFriendlyInvisibles, memberNamePrefix, memberNameSuffix, nameTagVisibility, deathMessageVisibility, collisionRule, players);

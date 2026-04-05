@@ -3,7 +3,6 @@
 	"package": "com.fabien_gigante.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"ChestRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
