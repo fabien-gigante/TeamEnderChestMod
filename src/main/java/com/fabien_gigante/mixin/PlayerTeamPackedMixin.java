@@ -1,10 +1,8 @@
 package com.fabien_gigante.mixin;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import net.minecraft.ChatFormatting;
@@ -13,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.inventory.PlayerEnderChestContainer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Team.CollisionRule;
 import net.minecraft.world.scores.Team.Visibility;
@@ -28,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.fabien_gigante.IEnderChestHolder;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 @Mixin(PlayerTeam.Packed.class)
@@ -77,7 +77,9 @@ public class PlayerTeamPackedMixin implements IEnderChestHolder {
 				CollisionRule.CODEC.optionalFieldOf("CollisionRule", CollisionRule.ALWAYS).forGetter(PlayerTeam.Packed::collisionRule), 
 				Codec.STRING.listOf().optionalFieldOf("Players", List.of()).forGetter(PlayerTeam.Packed::players),
 				// Add the field for enderChestInventory
-				ItemStackWithSlot.CODEC.listOf().optionalFieldOf("EnderItems", List.of()).forGetter(packed -> ((IEnderChestHolder)(Object) packed).getEnderChestContent())
+				ItemStackWithSlot.CODEC
+					.withAlternative(MapCodec.unitCodec(new ItemStackWithSlot(0, ItemStack.EMPTY))) // upward compatibility with old saves
+					.listOf().optionalFieldOf("EnderItems", List.of()).forGetter(packed -> ((IEnderChestHolder)(Object) packed).getEnderChestContent())
 			).apply(instance, PlayerTeamPackedMixin::create);
 		});
 	}
