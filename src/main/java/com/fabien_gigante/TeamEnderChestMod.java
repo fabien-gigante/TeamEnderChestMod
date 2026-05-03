@@ -44,12 +44,17 @@ public class TeamEnderChestMod implements ModInitializer {
 	}
 
 	private int onCommandDataGetTeam(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-		CommandSourceStack source = context.getSource();
-		PlayerTeam team = TeamArgument.getTeam(context, "team");
-		PlayerTeam.Packed packed = team.pack();
-		Tag nbt = PlayerTeam.Packed.CODEC.encode(packed, NbtOps.INSTANCE, new CompoundTag()).result().orElseThrow(null);
-		source.sendSuccess( () -> Component.translatable( "commands.data.team.query", team.getFormattedDisplayName(), NbtUtils.toPrettyComponent(nbt)), false);
-		return 1;
+		try {
+			CommandSourceStack source = context.getSource();
+			PlayerTeam team = TeamArgument.getTeam(context, "team");
+			PlayerTeam.Packed packed = team.pack();
+			Tag nbt = PlayerTeam.Packed.CODEC.encode(packed, NbtOps.INSTANCE, new CompoundTag()).result().orElseThrow(null);
+			source.sendSuccess( () -> Component.translatable( "commands.data.team.query", team.getFormattedDisplayName(), NbtUtils.toPrettyComponent(nbt)), false);
+			return 1;
+		} catch (Exception e) {
+			LOGGER.error("Error executing command /data get team", e);
+			throw e;
+		}
 	}
 
 }

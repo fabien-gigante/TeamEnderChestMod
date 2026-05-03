@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.fabien_gigante.IEnderChestHolder;
 import com.fabien_gigante.TeamEnderChestContainer;
@@ -32,12 +33,18 @@ public class TeamPackedMixin implements IEnderChestHolder {
 	@Override
 	public TeamEnderChestContainer getEnderChestContainer() { return this.enderChestContainer; }
 	@Override
-    public void setEnderChestContainer(TeamEnderChestContainer enderChestContainer) { this.enderChestContainer = enderChestContainer;} 
+    public void setEnderChestContainer(TeamEnderChestContainer enderChestContainer) { this.enderChestContainer = enderChestContainer; } 
 
 	private static PlayerTeam.Packed create(String name, Optional<Component> displayName, Optional<ChatFormatting> color, boolean allowFriendlyFire, boolean seeFriendlyInvisibles, Component memberNamePrefix, Component memberNameSuffix, Visibility nameTagVisibility, Visibility deathMessageVisibility, CollisionRule collisionRule, List<String> players, List<ItemStack> enderItems) {
         PlayerTeam.Packed packed = new PlayerTeam.Packed(name, displayName, color, allowFriendlyFire, seeFriendlyInvisibles, memberNamePrefix, memberNameSuffix, nameTagVisibility, deathMessageVisibility, collisionRule, players);
-		if (enderItems != null) ((TeamPackedMixin) (Object) packed).setEnderItems(enderItems);
+		if (enderItems != null && (Object)packed instanceof IEnderChestHolder holder) holder.setEnderItems(enderItems);
         return packed;
+	}
+
+	@Inject(method = "equals", at = @At("RETURN"), cancellable = true)
+	private void equals(Object obj, CallbackInfoReturnable<Boolean> cir) {
+		// ScoreboardSaveData.setData() relies on PlayerTeam.Packed equality to update teams, so we need to make sure that the ender chest inventory is also taken into account in the equality check
+		cir.setReturnValue(obj == this);
 	}
 
 	@Shadow @Final @Mutable public static Codec<PlayerTeam.Packed> CODEC;
@@ -59,7 +66,7 @@ public class TeamPackedMixin implements IEnderChestHolder {
 				CollisionRule.CODEC.optionalFieldOf("CollisionRule", CollisionRule.ALWAYS).forGetter(PlayerTeam.Packed::collisionRule), 
 				Codec.STRING.listOf().optionalFieldOf("Players", List.of()).forGetter(PlayerTeam.Packed::players),
 				// Add the field for enderChestInventory
-				ItemStack.OPTIONAL_CODEC.listOf().optionalFieldOf("EnderItems", null).forGetter(packed -> ((TeamPackedMixin) (Object) packed).getEnderItems())
+				ItemStack.OPTIONAL_CODEC.listOf().optionalFieldOf("EnderItems", null).forGetter(packed -> ((IEnderChestHolder) (Object) packed).getEnderItems())
 			).apply(instance, TeamPackedMixin::create);
 		});
 	}

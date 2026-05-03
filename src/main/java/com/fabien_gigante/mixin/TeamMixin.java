@@ -26,10 +26,14 @@ public class TeamMixin implements IEnderChestHolder {
 	@Override
 	public TeamEnderChestContainer getEnderChestContainer() { return this.enderChestContainer; }
 	@Override
-	public void setEnderChestContainer(TeamEnderChestContainer enderChestContainer) { this.enderChestContainer = enderChestContainer; }
+	public void setEnderChestContainer(TeamEnderChestContainer enderChestContainer) {
+		this.enderChestContainer = enderChestContainer;
+		this.enderChestContainer.setTeam((PlayerTeam)(Object)this);
+	}
 
     @Inject(method = "pack", at = @At("RETURN"), cancellable = true)
     private void onPack(CallbackInfoReturnable<PlayerTeam.Packed> cir) {
-        ((IEnderChestHolder)(Object)(cir.getReturnValue())).setEnderChestContainer(enderChestContainer);
+		if ((Object)cir.getReturnValue() instanceof IEnderChestHolder holder)
+			holder.setEnderChestContainer(enderChestContainer);
 	}
 }
