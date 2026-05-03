@@ -27,7 +27,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 @Mixin(PlayerTeam.Packed.class)
-public class TeamPackedMixin implements IEnderChestItemsHolder {
+public class PlayerTeamPackedMixin implements IEnderChestItemsHolder {
     @Unique private List<ItemStack> enderItems = NonNullList.withSize(27, ItemStack.EMPTY);
 
 	@Override
@@ -66,7 +66,7 @@ public class TeamPackedMixin implements IEnderChestItemsHolder {
 				Codec.STRING.listOf().optionalFieldOf("Players", List.of()).forGetter(PlayerTeam.Packed::players),
 				// Add the field for enderChestInventory
 				ItemStack.OPTIONAL_CODEC.listOf().optionalFieldOf("EnderItems", null).forGetter(packed -> ((IEnderChestItemsHolder) (Object) packed).getEnderChestItems())
-			).apply(instance, TeamPackedMixin::create);
+			).apply(instance, PlayerTeamPackedMixin::create);
 		});
 	}
 }

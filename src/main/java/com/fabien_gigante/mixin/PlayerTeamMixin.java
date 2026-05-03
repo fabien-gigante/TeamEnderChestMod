@@ -16,7 +16,7 @@ import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 
 @Mixin(PlayerTeam.class)
-public class TeamMixin implements IEnderChestItemsHolder {
+public class PlayerTeamMixin implements IEnderChestItemsHolder {
 	@Shadow @Final private Scoreboard scoreboard;
 	@Unique @Final private TeamEnderChestContainer enderChestContainer = new TeamEnderChestContainer((PlayerTeam)(Object)this);
 
