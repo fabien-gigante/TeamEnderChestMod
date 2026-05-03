@@ -61,9 +61,7 @@ public class PlayerTeamPackedMixin implements IEnderChestHolder {
 	}
 
 	@Shadow @Final @Mutable public static Codec<PlayerTeam.Packed> CODEC;
-
- 	@Inject(method="<clinit>",at=@At("TAIL"))
-    private static void setCodec(CallbackInfo ci) {
+	static {
 		CODEC = RecordCodecBuilder.create(instance -> {
 			return instance.group(
 				// Vanilla fields
