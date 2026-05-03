@@ -5,16 +5,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentSerialization;
-import net.minecraft.world.ItemStackWithSlot;
-import net.minecraft.world.inventory.PlayerEnderChestContainer;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.scores.PlayerTeam;
-import net.minecraft.world.scores.Team.CollisionRule;
-import net.minecraft.world.scores.Team.Visibility;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -25,10 +15,22 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.fabien_gigante.IEnderChestHolder;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.world.ItemStackWithSlot;
+import net.minecraft.world.inventory.PlayerEnderChestContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Team.CollisionRule;
+import net.minecraft.world.scores.Team.Visibility;
+
+import com.fabien_gigante.IEnderChestHolder;
 
 @Mixin(PlayerTeam.Packed.class)
 public class PlayerTeamPackedMixin implements IEnderChestHolder {
