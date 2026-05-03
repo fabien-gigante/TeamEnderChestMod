@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.fabien_gigante.IEnderChestItemsHolder;
+import com.fabien_gigante.IEnderChestHolder;
 import com.fabien_gigante.TeamEnderChestContainer;
 
 import net.minecraft.world.inventory.PlayerEnderChestContainer;
@@ -16,7 +16,7 @@ import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 
 @Mixin(PlayerTeam.class)
-public class PlayerTeamMixin implements IEnderChestItemsHolder {
+public class PlayerTeamMixin implements IEnderChestHolder {
 	@Shadow @Final private Scoreboard scoreboard;
 	@Unique @Final private TeamEnderChestContainer enderChestContainer = new TeamEnderChestContainer((PlayerTeam)(Object)this);
 
@@ -25,6 +25,6 @@ public class PlayerTeamMixin implements IEnderChestItemsHolder {
 
 	@Inject(method = "pack", at = @At("RETURN"), cancellable = true)
     private void onPack(CallbackInfoReturnable<PlayerTeam.Packed> cir) {
-		if ((Object)cir.getReturnValue() instanceof IEnderChestItemsHolder holder) holder.setEnderChestItems(getEnderChestItems());
+		if ((Object)cir.getReturnValue() instanceof IEnderChestHolder holder) holder.setEnderChestContent(this);
 	}
 }
